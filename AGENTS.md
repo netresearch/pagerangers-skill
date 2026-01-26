@@ -50,7 +50,15 @@ Credentials are obtained from PageRangers → Profile → API Settings.
 | 401 | Invalid token | Verify `PAGERANGERS_API_TOKEN` |
 | 403 | Invalid project | Verify `PAGERANGERS_PROJECT_HASH` |
 | 429 | Rate limited | Wait and retry |
-| Empty data | SERP not tracked | Enable SERP monitoring in PageRangers |
+| Empty keyword data | Keyword not in Explorer | Use `rankings` for Monitoring keywords; `keyword` requires Explorer data |
+
+## Module Distinction
+
+PageRangers Monitoring ≠ Explorer:
+- **Monitoring** (kpis, rankings, prospects): Your tracked keywords
+- **Explorer** (keyword command): PageRangers' general SERP database
+
+Keywords in Monitoring don't automatically have Explorer data. If `keyword` returns empty, use `rankings` instead.
 
 ## Best Practices
 

@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Clarified documentation: `keyword` command requires Explorer module data, not just Monitoring keywords
+- Updated error messages to explain Monitoring vs Explorer module distinction
+- Fixed `apikey` parameter name in API reference (was incorrectly `apiKey`)
+
 ## [1.0.0] - 2026-01-26
 
 ### Added

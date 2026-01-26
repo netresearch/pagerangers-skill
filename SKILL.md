@@ -115,13 +115,23 @@ AI: [Runs: python3 scripts/pagerangers.py keyword "SEO tools" --json]
 | 403 | Invalid project | Check `PAGERANGERS_PROJECT_HASH` |
 | 429 | Rate limit | Wait and retry |
 | Timeout | Slow network | Increase `PAGERANGERS_TIMEOUT` |
-| Empty keyword data | SERP tracking not enabled | Enable SERP monitoring in PageRangers for this keyword |
+| Empty keyword data | Keyword not in Explorer | See "Module Distinction" below |
 
-## Notes
+## PageRangers Module Distinction
 
-- **KeywordSerp**: Returns data only for keywords with SERP tracking enabled in PageRangers
-- **Rankings/Prospects**: Show keywords defined in the project's monitoring list
-- **KPIs**: Always available for projects with ranking monitoring
+PageRangers has two separate data sources that are **not interconnected**:
+
+| Module | Description | Skill Commands |
+|--------|-------------|----------------|
+| **Monitoring** | Custom keywords you add to track your rankings | `kpis`, `rankings`, `prospects` |
+| **Explorer** | PageRangers' general keyword database with SERP data | `keyword` |
+
+**Important:** Keywords in your Monitoring list are NOT automatically in the Explorer database. The `keyword` command queries Explorer data (search volume, competition, top URLs). If a keyword exists only in your Monitoring list, the `keyword` command returns empty data.
+
+**What to use when:**
+- Use `rankings` to see positions for keywords you're tracking (Monitoring)
+- Use `keyword` for SERP analysis of keywords in PageRangers Explorer database
+- Not all keywords have Explorer data available
 
 ## API Costs
 

@@ -61,6 +61,8 @@ Shows how rankings changed between two dates.
 
 Returns SERP results for a specific keyword.
 
+> **Note:** This endpoint requires the keyword to exist in PageRangers' **Explorer** database, not just your Monitoring keyword list. Keywords tracked only in Monitoring will return empty data. Use the Rankings endpoint for Monitoring keywords.
+
 **Cost:** 1 Credit
 
 **Parameters:**

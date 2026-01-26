@@ -7,7 +7,7 @@
       "query": {
         "keyword": "{keyword}",
         "projectHash": "{project_hash}",
-        "apiKey": "{api_token}",
+        "apikey": "{api_token}",
         "format": "json"
       },
       "headers": {
