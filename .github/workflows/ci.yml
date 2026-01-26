@@ -45,7 +45,7 @@ jobs:
       - name: Run tests
         run: uv run pytest --cov=scripts --cov-report=xml --cov-report=term-missing
       - name: Upload coverage
-        uses: codecov/codecov-action@0561704f0f02c16a585d4c7555e57fa2e44cf909 # v5.5.2
+        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
         if: matrix.python-version == '3.12'
         with:
           files: coverage.xml
