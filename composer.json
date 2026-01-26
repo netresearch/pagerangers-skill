@@ -1,0 +1,21 @@
+{
+  "name": "netresearch/agent-pagerangers-skill",
+  "description": "PageRangers SEO API integration for AI assistants",
+  "type": "ai-agent-skill",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Netresearch DTT GmbH",
+      "homepage": "https://www.netresearch.de/",
+      "role": "Manufacturer"
+    }
+  ],
+  "require": {
+    "netresearch/composer-agent-skill-plugin": "*"
+  },
+  "extra": {
+    "ai-agent-skill": [
+      "SKILL.md"
+    ]
+  }
+}

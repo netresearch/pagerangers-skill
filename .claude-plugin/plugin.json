@@ -1,0 +1,22 @@
+{
+  "name": "pagerangers-seo",
+  "version": "1.0.0",
+  "description": "PageRangers SEO API integration for AI assistants",
+  "repository": "https://github.com/netresearch/pagerangers-skill",
+  "license": "MIT",
+  "author": {
+    "name": "Netresearch DTT GmbH",
+    "url": "https://www.netresearch.de/"
+  },
+  "keywords": [
+    "pagerangers",
+    "seo",
+    "serp",
+    "keyword-research",
+    "rankings",
+    "monitoring"
+  ],
+  "skills": [
+    "."
+  ]
+}

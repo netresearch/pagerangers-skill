@@ -1,0 +1,76 @@
+{
+  "base_url": "https://api.pagerangers.com",
+  "endpoints": {
+    "keyword": {
+      "method": "GET",
+      "path": "/Monitoring/KeywordSerp/",
+      "query": {
+        "keyword": "{keyword}",
+        "projectHash": "{project_hash}",
+        "apiKey": "{api_token}",
+        "format": "json"
+      },
+      "headers": {
+        "Accept": "application/json"
+      },
+      "response": {
+        "main_keyword": "keyword",
+        "search_volume": "searchVolume",
+        "competition": "competition",
+        "top_urls": "serp",
+        "important_keywords": "relatedKeywords"
+      }
+    },
+    "rankings": {
+      "method": "GET",
+      "path": "/Monitoring/Rankings/",
+      "query": {
+        "projectHash": "{project_hash}",
+        "apikey": "{api_token}",
+        "format": "json",
+        "limit": "100"
+      },
+      "headers": {
+        "Accept": "application/json"
+      },
+      "response": {
+        "keywords": "rankings",
+        "total": "total"
+      }
+    },
+    "main_kpis": {
+      "method": "GET",
+      "path": "/Monitoring/MainKpis/",
+      "query": {
+        "projectHash": "{project_hash}",
+        "apikey": "{api_token}",
+        "format": "json"
+      },
+      "headers": {
+        "Accept": "application/json"
+      },
+      "response": {
+        "ranking_index": "rankingindex",
+        "top_10_count": "numberOfKeywordsInTop10",
+        "top_100_count": "numberOfKeywordsTop100",
+        "average_position": "averageTopPosition"
+      }
+    },
+    "prospects": {
+      "method": "GET",
+      "path": "/Monitoring/KeywordProspects/",
+      "query": {
+        "projectHash": "{project_hash}",
+        "apikey": "{api_token}",
+        "format": "json",
+        "limit": "50"
+      },
+      "headers": {
+        "Accept": "application/json"
+      },
+      "response": {
+        "prospects": "prospects"
+      }
+    }
+  }
+}
