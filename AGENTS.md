@@ -18,16 +18,18 @@ This skill provides access to the PageRangers Monitoring API for SEO data analys
 
 | Command | Purpose | Example |
 |---------|---------|---------|
-| `kpis` | Get project performance metrics | `python3 scripts/pagerangers.py kpis` |
-| `rankings` | List keyword positions | `python3 scripts/pagerangers.py rankings --limit 20` |
-| `keyword` | Analyze specific keyword | `python3 scripts/pagerangers.py keyword "SEO tools"` |
-| `prospects` | Find opportunities | `python3 scripts/pagerangers.py prospects --limit 10` |
+| `kpis` | Get project performance metrics | `python3 scripts/pagerangers.py --json kpis` |
+| `rankings` | List keyword positions | `python3 scripts/pagerangers.py --json rankings --limit 20` |
+| `keyword` | Analyze specific keyword | `python3 scripts/pagerangers.py --json keyword "SEO tools"` |
+| `prospects` | Find opportunities | `python3 scripts/pagerangers.py --json prospects --limit 10` |
+
+> **Flag order:** Global flags (`--json`, `--debug`) must come **before** the subcommand.
 
 ## Workflow
 
 1. **Check credentials**: Verify `~/.env.pagerangers` exists with API token and project hash
 2. **Select command**: Match user intent to appropriate command
-3. **Execute**: Run command with appropriate flags (`--json` for structured output)
+3. **Execute**: Run with `--json` flag **before** subcommand for structured output
 4. **Interpret**: Present data with actionable insights
 
 ## Authentication Setup

@@ -40,27 +40,29 @@ python3 scripts/pagerangers.py prospects --limit 10
 
 ## Usage Examples
 
+> **Note:** Global flags (`--json`, `--debug`) must come **before** the subcommand.
+
 ### Keyword Analysis
 ```bash
-python3 scripts/pagerangers.py keyword "online marketing" --top 10 --json
+python3 scripts/pagerangers.py --json keyword "online marketing" --top 10
 ```
 Returns: keyword, search volume, competition (low/medium/high), top URLs, related keywords.
 
 ### Project Rankings
 ```bash
-python3 scripts/pagerangers.py rankings --limit 20
+python3 scripts/pagerangers.py --json rankings --limit 20
 ```
 Returns: keyword, position, ranking URL.
 
 ### Project KPIs
 ```bash
-python3 scripts/pagerangers.py kpis --json
+python3 scripts/pagerangers.py --json kpis
 ```
 Returns: ranking index, top 10 count, top 100 count, average position.
 
 ### Keyword Opportunities
 ```bash
-python3 scripts/pagerangers.py prospects --limit 10
+python3 scripts/pagerangers.py --json prospects --limit 10
 ```
 Returns: keywords with best ranking potential.
 
