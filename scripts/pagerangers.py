@@ -18,9 +18,40 @@ import argparse
 import json
 import os
 import sys
+import urllib.error
 import urllib.parse
 import urllib.request
+from dataclasses import dataclass
 from pathlib import Path
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
+# HTTP Status Codes
+HTTP_UNAUTHORIZED = 401
+HTTP_FORBIDDEN = 403
+HTTP_TOO_MANY_REQUESTS = 429
+
+# Competition Thresholds
+COMPETITION_LOW_THRESHOLD = 0.33
+COMPETITION_MEDIUM_THRESHOLD = 0.66
+
+# Default Values
+DEFAULT_TIMEOUT = 30
+DEFAULT_TOP_URLS = 5
+DEFAULT_LIMIT = 20
+MAX_RELATED_KEYWORDS = 10
+
+
+@dataclass
+class CommandContext:
+    """Context for command execution."""
+
+    config: dict
+    variables: dict[str, str]
+    timeout: int
+    debug: bool
 
 
 def load_env_file(path: Path) -> None:
@@ -43,7 +74,7 @@ def load_config(path: Path) -> dict:
         return json.load(handle)
 
 
-def substitute(value, variables: dict[str, str]):
+def substitute(value: str | dict | list | None, variables: dict[str, str]) -> str | dict | list | None:
     """Replace {placeholder} strings with variable values."""
     if isinstance(value, str):
         result = value
@@ -57,7 +88,7 @@ def substitute(value, variables: dict[str, str]):
     return value
 
 
-def get_by_path(data, path: str):
+def get_by_path(data: dict | list | None, path: str) -> str | dict | list | None:
     """Extract value from nested dict using dot notation."""
     if not path:
         return data
@@ -72,7 +103,7 @@ def get_by_path(data, path: str):
             if current is None:
                 return None
             idx = int(idx_part)
-            current = current[idx] if idx < len(current) else None
+            current = current[idx] if isinstance(current, list) and idx < len(current) else None
         elif isinstance(current, dict):
             current = current.get(part)
         else:
@@ -80,7 +111,7 @@ def get_by_path(data, path: str):
     return current
 
 
-def normalize_urls(value, limit: int | None = None) -> list[str]:
+def normalize_urls(value: list | None, limit: int | None = None) -> list[str]:
     """Extract URLs from SERP results."""
     if not isinstance(value, list):
         return []
@@ -97,14 +128,14 @@ def normalize_urls(value, limit: int | None = None) -> list[str]:
     return urls
 
 
-def normalize_competition(value) -> str:
+def normalize_competition(value: float | int | str | None) -> str:
     """Normalize competition score to low/medium/high."""
     if value is None:
         return "unknown"
     if isinstance(value, (int, float)):
-        if value <= 0.33:
+        if value <= COMPETITION_LOW_THRESHOLD:
             return "low"
-        if value <= 0.66:
+        if value <= COMPETITION_MEDIUM_THRESHOLD:
             return "medium"
         return "high"
     return str(value)
@@ -125,11 +156,11 @@ def request_json(method: str, url: str, headers: dict, body: dict | None, timeou
             payload = response.read()
     except urllib.error.HTTPError as exc:
         detail = exc.read().decode("utf-8", errors="replace")
-        if exc.code == 401:
+        if exc.code == HTTP_UNAUTHORIZED:
             raise RuntimeError("Authentication failed. Check PAGERANGERS_API_TOKEN.") from exc
-        if exc.code == 403:
+        if exc.code == HTTP_FORBIDDEN:
             raise RuntimeError("Access denied. Check PAGERANGERS_PROJECT_HASH.") from exc
-        if exc.code == 429:
+        if exc.code == HTTP_TOO_MANY_REQUESTS:
             raise RuntimeError("Rate limit exceeded. Try again later.") from exc
         raise RuntimeError(f"HTTP {exc.code}: {detail}") from exc
     except urllib.error.URLError as exc:
@@ -141,17 +172,17 @@ def request_json(method: str, url: str, headers: dict, body: dict | None, timeou
         raise RuntimeError("Invalid JSON response from API") from exc
 
 
-def call_endpoint(config: dict, endpoint_name: str, variables: dict, timeout: int, debug: bool = False) -> dict:
+def call_endpoint(ctx: CommandContext, endpoint_name: str) -> dict:
     """Call a configured API endpoint."""
-    base_url = os.environ.get("PAGERANGERS_BASE_URL", config.get("base_url", ""))
+    base_url = os.environ.get("PAGERANGERS_BASE_URL", ctx.config.get("base_url", ""))
     if not base_url:
         raise RuntimeError("Missing base_url in config")
 
-    endpoint = config.get("endpoints", {}).get(endpoint_name)
+    endpoint = ctx.config.get("endpoints", {}).get(endpoint_name)
     if not endpoint:
         raise RuntimeError(f"Unknown endpoint: {endpoint_name}")
 
-    endpoint = substitute(endpoint, variables)
+    endpoint = substitute(endpoint, ctx.variables)
     method = endpoint.get("method", "GET").upper()
     path = endpoint.get("path", "")
 
@@ -160,14 +191,12 @@ def call_endpoint(config: dict, endpoint_name: str, variables: dict, timeout: in
     if query:
         url += "?" + urllib.parse.urlencode(query)
 
-    if debug:
-        # Mask sensitive values in debug output
-        safe_url = url.replace(variables.get("api_token", ""), "***")
+    if ctx.debug:
+        safe_url = url.replace(ctx.variables.get("api_token", ""), "***")
         print(f"[DEBUG] {method} {safe_url}", file=sys.stderr)
 
-    result = request_json(method, url, endpoint.get("headers", {}), endpoint.get("body"), timeout)
+    result = request_json(method, url, endpoint.get("headers", {}), endpoint.get("body"), ctx.timeout)
 
-    # Check for API-level errors (returned with 200 status)
     if isinstance(result, dict) and "errormessage" in result:
         error_msg = result["errormessage"]
         if "api-key" in error_msg.lower():
@@ -177,17 +206,17 @@ def call_endpoint(config: dict, endpoint_name: str, variables: dict, timeout: in
     return result
 
 
-def cmd_keyword(args, config: dict, variables: dict, timeout: int) -> int:
+def cmd_keyword(args: argparse.Namespace, ctx: CommandContext) -> int:
     """Analyze a specific keyword."""
-    variables["keyword"] = args.keyword
+    ctx.variables["keyword"] = args.keyword
 
     try:
-        payload = call_endpoint(config, "keyword", variables, timeout, args.debug)
+        payload = call_endpoint(ctx, "keyword")
     except RuntimeError as e:
         print(f"Error: {e}", file=sys.stderr)
         return 1
 
-    response_map = config.get("endpoints", {}).get("keyword", {}).get("response", {})
+    response_map = ctx.config.get("endpoints", {}).get("keyword", {}).get("response", {})
 
     result = {
         "main_keyword": get_by_path(payload, response_map.get("main_keyword", "")) or args.keyword,
@@ -204,34 +233,34 @@ def cmd_keyword(args, config: dict, variables: dict, timeout: int) -> int:
     print(f"Keyword: {result['main_keyword']}")
     print(f"Search Volume: {result['search_volume']}")
     print(f"Competition: {result['competition']}")
-    if result['top_urls']:
+    if result["top_urls"]:
         print(f"\nTop {len(result['top_urls'])} URLs:")
-        for i, url in enumerate(result['top_urls'], 1):
+        for i, url in enumerate(result["top_urls"], 1):
             print(f"  {i}. {url}")
-    if result['important_keywords']:
+    if result["important_keywords"]:
         print("\nRelated Keywords:")
-        for kw in result['important_keywords'][:10]:
+        for kw in result["important_keywords"][:MAX_RELATED_KEYWORDS]:
             print(f"  - {kw}")
     return 0
 
 
-def cmd_rankings(args, config: dict, variables: dict, timeout: int) -> int:
+def cmd_rankings(args: argparse.Namespace, ctx: CommandContext) -> int:
     """Get current keyword rankings."""
     try:
-        payload = call_endpoint(config, "rankings", variables, timeout, args.debug)
+        payload = call_endpoint(ctx, "rankings")
     except RuntimeError as e:
         print(f"Error: {e}", file=sys.stderr)
         return 1
 
-    response_map = config.get("endpoints", {}).get("rankings", {}).get("response", {})
+    response_map = ctx.config.get("endpoints", {}).get("rankings", {}).get("response", {})
     keywords = get_by_path(payload, response_map.get("keywords", "")) or []
 
     if args.json:
-        print(json.dumps({"rankings": keywords[:args.limit]}, indent=2, ensure_ascii=False))
+        print(json.dumps({"rankings": keywords[: args.limit]}, indent=2, ensure_ascii=False))
         return 0
 
     print(f"Top {min(len(keywords), args.limit)} Keyword Rankings:\n")
-    for i, kw in enumerate(keywords[:args.limit], 1):
+    for i, kw in enumerate(keywords[: args.limit], 1):
         name = kw.get("keyword", kw.get("name", "unknown"))
         pos = kw.get("position", kw.get("rank", "?"))
         url = kw.get("url", kw.get("rankingUrl", ""))
@@ -241,15 +270,15 @@ def cmd_rankings(args, config: dict, variables: dict, timeout: int) -> int:
     return 0
 
 
-def cmd_kpis(args, config: dict, variables: dict, timeout: int) -> int:
+def cmd_kpis(args: argparse.Namespace, ctx: CommandContext) -> int:
     """Get main KPIs."""
     try:
-        payload = call_endpoint(config, "main_kpis", variables, timeout, args.debug)
+        payload = call_endpoint(ctx, "main_kpis")
     except RuntimeError as e:
         print(f"Error: {e}", file=sys.stderr)
         return 1
 
-    response_map = config.get("endpoints", {}).get("main_kpis", {}).get("response", {})
+    response_map = ctx.config.get("endpoints", {}).get("main_kpis", {}).get("response", {})
 
     result = {
         "ranking_index": get_by_path(payload, response_map.get("ranking_index", "")),
@@ -270,23 +299,23 @@ def cmd_kpis(args, config: dict, variables: dict, timeout: int) -> int:
     return 0
 
 
-def cmd_prospects(args, config: dict, variables: dict, timeout: int) -> int:
+def cmd_prospects(args: argparse.Namespace, ctx: CommandContext) -> int:
     """Find high-opportunity keywords."""
     try:
-        payload = call_endpoint(config, "prospects", variables, timeout, args.debug)
+        payload = call_endpoint(ctx, "prospects")
     except RuntimeError as e:
         print(f"Error: {e}", file=sys.stderr)
         return 1
 
-    response_map = config.get("endpoints", {}).get("prospects", {}).get("response", {})
+    response_map = ctx.config.get("endpoints", {}).get("prospects", {}).get("response", {})
     prospects = get_by_path(payload, response_map.get("prospects", "")) or []
 
     if args.json:
-        print(json.dumps({"prospects": prospects[:args.limit]}, indent=2, ensure_ascii=False))
+        print(json.dumps({"prospects": prospects[: args.limit]}, indent=2, ensure_ascii=False))
         return 0
 
     print(f"Top {min(len(prospects), args.limit)} Keyword Opportunities:\n")
-    for i, kw in enumerate(prospects[:args.limit], 1):
+    for i, kw in enumerate(prospects[: args.limit], 1):
         name = kw.get("keyword", kw.get("name", "unknown"))
         pos = kw.get("position", kw.get("rank", "?"))
         volume = kw.get("searchVolume", kw.get("volume", "?"))
@@ -295,7 +324,8 @@ def cmd_prospects(args, config: dict, variables: dict, timeout: int) -> int:
     return 0
 
 
-def main() -> int:
+def create_parser() -> argparse.ArgumentParser:
+    """Create and configure the argument parser."""
     parser = argparse.ArgumentParser(
         description="PageRangers SEO API client",
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -329,28 +359,40 @@ Configuration:
 
     subparsers = parser.add_subparsers(dest="command", required=True)
 
-    # keyword command
     kw_parser = subparsers.add_parser("keyword", help="Analyze a keyword")
     kw_parser.add_argument("keyword", help="Keyword to analyze")
-    kw_parser.add_argument("--top", type=int, default=5, help="Number of top URLs (default: 5)")
+    kw_parser.add_argument("--top", type=int, default=DEFAULT_TOP_URLS, help=f"Top URLs (default: {DEFAULT_TOP_URLS})")
 
-    # rankings command
     rank_parser = subparsers.add_parser("rankings", help="Get keyword rankings")
-    rank_parser.add_argument("--limit", type=int, default=20, help="Max results (default: 20)")
+    rank_parser.add_argument("--limit", type=int, default=DEFAULT_LIMIT, help=f"Max results (default: {DEFAULT_LIMIT})")
 
-    # kpis command
     subparsers.add_parser("kpis", help="Get main KPIs")
 
-    # prospects command
     prosp_parser = subparsers.add_parser("prospects", help="Find keyword opportunities")
-    prosp_parser.add_argument("--limit", type=int, default=20, help="Max results (default: 20)")
+    prosp_parser.add_argument(
+        "--limit", type=int, default=DEFAULT_LIMIT, help=f"Max results (default: {DEFAULT_LIMIT})"
+    )
 
+    return parser
+
+
+def get_command_handlers() -> dict[str, Callable[[argparse.Namespace, CommandContext], int]]:
+    """Return mapping of command names to handler functions."""
+    return {
+        "keyword": cmd_keyword,
+        "rankings": cmd_rankings,
+        "kpis": cmd_kpis,
+        "prospects": cmd_prospects,
+    }
+
+
+def main() -> int:
+    """Main entry point."""
+    parser = create_parser()
     args = parser.parse_args()
 
-    # Load environment
     load_env_file(Path.home() / ".env.pagerangers")
 
-    # Load config
     config_path = Path(args.config)
     if not config_path.is_file():
         print(f"Error: Config not found: {config_path}", file=sys.stderr)
@@ -359,7 +401,6 @@ Configuration:
 
     config = load_config(config_path)
 
-    # Check credentials
     token = os.environ.get("PAGERANGERS_API_TOKEN")
     project_hash = os.environ.get("PAGERANGERS_PROJECT_HASH")
     if not token or not project_hash:
@@ -369,24 +410,20 @@ Configuration:
         print("  PAGERANGERS_PROJECT_HASH=your_project_hash", file=sys.stderr)
         return 1
 
-    variables = {
-        "api_token": token,
-        "project_hash": project_hash,
-    }
-    timeout = int(os.environ.get("PAGERANGERS_TIMEOUT", "30"))
+    ctx = CommandContext(
+        config=config,
+        variables={"api_token": token, "project_hash": project_hash},
+        timeout=int(os.environ.get("PAGERANGERS_TIMEOUT", str(DEFAULT_TIMEOUT))),
+        debug=args.debug,
+    )
 
-    # Dispatch command
-    if args.command == "keyword":
-        return cmd_keyword(args, config, variables, timeout)
-    elif args.command == "rankings":
-        return cmd_rankings(args, config, variables, timeout)
-    elif args.command == "kpis":
-        return cmd_kpis(args, config, variables, timeout)
-    elif args.command == "prospects":
-        return cmd_prospects(args, config, variables, timeout)
-    else:
-        parser.print_help()
-        return 1
+    handlers = get_command_handlers()
+    handler = handlers.get(args.command)
+    if handler:
+        return handler(args, ctx)
+
+    parser.print_help()
+    return 1
 
 
 if __name__ == "__main__":

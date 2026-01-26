@@ -63,5 +63,8 @@ Thumbs.db
 # uv
 .uv/
 
+# Serena MCP
+.serena/
+
 # Packaged skills
 *.skill
