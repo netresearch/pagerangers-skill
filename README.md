@@ -21,30 +21,45 @@ PAGERANGERS_API_TOKEN=your_api_key_here
 PAGERANGERS_PROJECT_HASH=your_project_hash_here
 EOF
 
-# 2. Run commands
-python3 scripts/pagerangers.py kpis
-python3 scripts/pagerangers.py rankings --limit 10
-python3 scripts/pagerangers.py keyword "SEO tools" --top 5
-python3 scripts/pagerangers.py prospects --limit 10
+# 2. Run commands (--json flag must come before subcommand)
+python3 scripts/pagerangers.py --json kpis
+python3 scripts/pagerangers.py --json rankings --limit 10
+python3 scripts/pagerangers.py --json keyword "SEO tools" --top 5
+python3 scripts/pagerangers.py --json prospects --limit 10
 ```
 
 ## Installation
 
-### As Claude Code Plugin
+### Claude Code (via Marketplace)
 
 ```bash
-# Clone and install
+# 1. Add Netresearch marketplace (once)
+/plugin marketplace add https://github.com/netresearch/claude-code-marketplace.git
+
+# 2. The skill auto-activates when you mention PageRangers or SEO rankings
+```
+
+### Codex CLI
+
+```bash
+# Install skill directly from GitHub
+$skill-installer https://github.com/netresearch/pagerangers-skill
+
+# Or clone manually
+git clone https://github.com/netresearch/pagerangers-skill ~/.codex/skills/pagerangers-seo
+```
+
+### Manual Installation
+
+```bash
+# Clone repository
 git clone https://github.com/netresearch/pagerangers-skill
 cd pagerangers-skill
 
-# Install with dev dependencies (for testing)
+# Install dependencies (optional, for development)
 uv pip install -e ".[dev]"
-```
 
-### As Standalone Script
-
-```bash
-# No installation needed - just run with Python 3.10+
+# Run directly with Python 3.10+
 python3 scripts/pagerangers.py --help
 ```
 
