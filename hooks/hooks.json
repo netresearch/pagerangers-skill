@@ -1,0 +1,16 @@
+{
+  "description": "PageRangers credential detection hook",
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/detect_credentials.py",
+            "timeout": 3
+          }
+        ]
+      }
+    ]
+  }
+}
