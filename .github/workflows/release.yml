@@ -1,0 +1,63 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@5ef0c079ce82195b2a36a210272d6b661572d83e # v2.14.2
+        with:
+          egress-policy: audit
+
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Get version from tag
+        id: version
+        run: echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Create pagerangers-seo skill package
+        run: |
+          mkdir -p dist-skill
+          cp SKILL.md dist-skill/
+          cp LICENSE dist-skill/
+          [ -d "references" ] && cp -r references dist-skill/
+          cd dist-skill
+          zip -r ../pagerangers-seo-skill-${{ steps.version.outputs.version }}.zip .
+          tar -czvf ../pagerangers-seo-skill-${{ steps.version.outputs.version }}.tar.gz .
+
+      - name: Create pagerangers-seo plugin package
+        run: |
+          mkdir -p dist-plugin
+          cp SKILL.md dist-plugin/
+          cp LICENSE dist-plugin/
+          [ -d "references" ] && cp -r references dist-plugin/
+          # Include plugin manifest, hooks, and scripts
+          [ -d ".claude-plugin" ] && cp -r .claude-plugin dist-plugin/
+          [ -d "hooks" ] && cp -r hooks dist-plugin/
+          [ -d "scripts" ] && cp -r scripts dist-plugin/ && find dist-plugin/scripts -name '__pycache__' -type d -exec rm -rf {} + 2>/dev/null || true
+          cd dist-plugin
+          zip -r ../pagerangers-seo-plugin-${{ steps.version.outputs.version }}.zip .
+          tar -czvf ../pagerangers-seo-plugin-${{ steps.version.outputs.version }}.tar.gz .
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2.5.0
+        with:
+          files: |
+            pagerangers-seo-skill-${{ steps.version.outputs.version }}.zip
+            pagerangers-seo-skill-${{ steps.version.outputs.version }}.tar.gz
+            pagerangers-seo-plugin-${{ steps.version.outputs.version }}.zip
+            pagerangers-seo-plugin-${{ steps.version.outputs.version }}.tar.gz
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
