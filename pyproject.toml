@@ -6,7 +6,7 @@ readme = "README.md"
 license = "MIT"
 requires-python = ">=3.10"
 authors = [
-    { name = "Netresearch DTT GmbH", email = "info@netresearch.de" }
+    { name = "Netresearch DTT GmbH" }
 ]
 keywords = ["pagerangers", "seo", "api", "ai-assistant", "serp", "keyword-research"]
 classifiers = [
