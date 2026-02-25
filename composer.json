@@ -1,5 +1,8 @@
 {
-  "name": "netresearch/agent-pagerangers-skill",
+  "name": "netresearch/pagerangers-skill",
+  "replace": {
+    "netresearch/agent-pagerangers-skill": "self.version"
+  },
   "description": "PageRangers SEO API integration for AI assistants",
   "type": "ai-agent-skill",
   "license": "MIT",
