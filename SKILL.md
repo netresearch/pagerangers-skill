@@ -1,12 +1,6 @@
 ---
 name: pagerangers-seo
-description: "PageRangers SEO API integration for AI assistants. TRIGGER when user mentions PageRangers, SEO keywords, search rankings, SERP analysis, or keyword research. Provides keyword analysis, ranking data, KPIs, and keyword opportunities via the PageRangers Monitoring API. Requires python3. Works with Claude Code and Codex CLI."
-license: MIT
-metadata:
-  author: netresearch
-  version: "1.0.0"
-  repository: https://github.com/netresearch/pagerangers-skill
-  compatibility: "python3, Claude Code, Codex CLI"
+description: "Use when querying PageRangers SEO API for keyword analysis, search rankings, SERP data, KPIs, or keyword opportunities."
 ---
 
 # PageRangers SEO
