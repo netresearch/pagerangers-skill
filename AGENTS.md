@@ -9,6 +9,7 @@ This skill provides access to the PageRangers Monitoring API for SEO data analys
 ## Activation Triggers
 
 **AUTOMATICALLY ACTIVATE** when user mentions:
+
 - PageRangers, SEO keywords, search rankings
 - SERP analysis, keyword research
 - Ranking positions, search volume
@@ -57,6 +58,7 @@ Credentials are obtained from PageRangers → Profile → API Settings.
 ## Module Distinction
 
 PageRangers Monitoring ≠ Explorer:
+
 - **Monitoring** (kpis, rankings, prospects): Your tracked keywords
 - **Explorer** (keyword command): PageRangers' general SERP database
 

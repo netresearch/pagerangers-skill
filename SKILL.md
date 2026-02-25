@@ -35,27 +35,35 @@ python3 scripts/pagerangers.py --json prospects --limit 10
 ## Usage Examples
 
 ### Keyword Analysis
+
 ```bash
 python3 scripts/pagerangers.py --json keyword "online marketing" --top 10
 ```
+
 Returns: keyword, search volume, competition (low/medium/high), top URLs, related keywords.
 
 ### Project Rankings
+
 ```bash
 python3 scripts/pagerangers.py --json rankings --limit 20
 ```
+
 Returns: keyword, position, ranking URL.
 
 ### Project KPIs
+
 ```bash
 python3 scripts/pagerangers.py --json kpis
 ```
+
 Returns: ranking index, top 10 count, top 100 count, average position.
 
 ### Keyword Opportunities
+
 ```bash
 python3 scripts/pagerangers.py --json prospects --limit 10
 ```
+
 Returns: keywords with best ranking potential.
 
 ## References

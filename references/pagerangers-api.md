@@ -4,13 +4,14 @@ Complete API documentation for the PageRangers Monitoring endpoints.
 
 ## Base URL
 
-```
+```text
 https://api.pagerangers.com
 ```
 
 ## Authentication
 
 All endpoints require:
+
 - `projectHash`: Your project identifier
 - `apiKey`: Your API key from Profile → API Settings
 
@@ -23,6 +24,7 @@ Returns all keywords defined in the project.
 **Cost:** 1 Credit
 
 **Parameters:**
+
 - `projectHash` (required)
 - `apiKey` (required)
 - `format` (optional): `json` or `xml`
@@ -34,6 +36,7 @@ Returns current ranking positions for all keywords.
 **Cost:** 1 Credit
 
 **Parameters:**
+
 - `projectHash` (required)
 - `apiKey` (required)
 - `date` (optional): Unix timestamp
@@ -50,6 +53,7 @@ Shows how rankings changed between two dates.
 **Cost:** 1 Credit
 
 **Parameters:**
+
 - `projectHash` (required)
 - `apiKey` (required)
 - `fromDate` (optional): Unix timestamp (default: 7 days ago)
@@ -66,6 +70,7 @@ Returns SERP results for a specific keyword.
 **Cost:** 1 Credit
 
 **Parameters:**
+
 - `projectHash` (required)
 - `apiKey` (required)
 - `keyword` (required): The keyword to analyze
@@ -79,6 +84,7 @@ Identifies keywords with best ranking opportunities.
 **Cost:** 1 Credit
 
 **Parameters:**
+
 - `projectHash` (required)
 - `apiKey` (required)
 - `limit`, `offset`, `tagfilter`, `format`
@@ -90,12 +96,14 @@ Returns project performance indicators.
 **Cost:** 1 Credit
 
 **Response includes:**
+
 - Ranking Index
 - Keywords in Top 10
 - Keywords in Top 100
 - Average position of ranking keywords
 
 **Parameters:**
+
 - `projectHash` (required)
 - `apiKey` (required)
 - `competitorDomain` (optional)
@@ -177,7 +185,7 @@ The `pagerangers-api.json` maps endpoints to response paths:
 
 Use dot notation with optional array indexes:
 
-```
+```text
 data.keyword          → payload["data"]["keyword"]
 serp[0].url           → payload["serp"][0]["url"]
 results.items[2].name → payload["results"]["items"][2]["name"]

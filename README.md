@@ -86,7 +86,7 @@ ruff format scripts tests
 
 ### Project Structure
 
-```
+```text
 pagerangers-seo/
 ├── .claude-plugin/     # Claude Code plugin manifest
 │   └── plugin.json
