@@ -1,6 +1,6 @@
 # PageRangers SEO Skill
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License](https://img.shields.io/badge/License-MIT%20%2B%20CC--BY--SA--4.0-blue.svg)](#license)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 
 AI agent skill for querying the PageRangers Monitoring API. Works with Claude Code, Codex CLI, and other AI assistants supporting the Agent Skills specification.
