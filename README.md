@@ -64,6 +64,7 @@ composer require netresearch/pagerangers-skill
 ```
 
 Requires [netresearch/composer-agent-skill-plugin](https://github.com/netresearch/composer-agent-skill-plugin).
+
 ## Development
 
 ### Setup
