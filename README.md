@@ -30,39 +30,40 @@ python3 scripts/pagerangers.py --json prospects --limit 10
 
 ## Installation
 
-### Claude Code (via Marketplace)
+### Marketplace (Recommended)
+
+Add the [Netresearch marketplace](https://github.com/netresearch/claude-code-marketplace) once, then browse and install skills:
 
 ```bash
-# 1. Add Netresearch marketplace (once)
-/plugin marketplace add https://github.com/netresearch/claude-code-marketplace.git
-
-# 2. The skill auto-activates when you mention PageRangers or SEO rankings
+# Claude Code
+/plugin marketplace add netresearch/claude-code-marketplace
 ```
 
-### Codex CLI
+### npx ([skills.sh](https://skills.sh))
+
+Install with any [Agent Skills](https://agentskills.io)-compatible agent:
 
 ```bash
-# Install skill directly from GitHub
-$skill-installer https://github.com/netresearch/pagerangers-skill
-
-# Or clone manually
-git clone https://github.com/netresearch/pagerangers-skill ~/.codex/skills/pagerangers-seo
+npx skills add https://github.com/netresearch/pagerangers-skill --skill pagerangers-seo
 ```
 
-### Manual Installation
+### Download Release
+
+Download the [latest release](https://github.com/netresearch/pagerangers-skill/releases/latest) and extract to your agent's skills directory.
+
+### Git Clone
 
 ```bash
-# Clone repository
-git clone https://github.com/netresearch/pagerangers-skill
-cd pagerangers-skill
-
-# Install dependencies (optional, for development)
-uv pip install -e ".[dev]"
-
-# Run directly with Python 3.10+
-python3 scripts/pagerangers.py --help
+git clone https://github.com/netresearch/pagerangers-skill.git
 ```
 
+### Composer (PHP Projects)
+
+```bash
+composer require netresearch/pagerangers-skill
+```
+
+Requires [netresearch/composer-agent-skill-plugin](https://github.com/netresearch/composer-agent-skill-plugin).
 ## Development
 
 ### Setup
