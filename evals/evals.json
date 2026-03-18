@@ -1,0 +1,33 @@
+{
+  "skill_name": "pagerangers-seo",
+  "evals": [
+    {
+      "id": 1,
+      "eval_name": "check-keyword-rankings",
+      "prompt": "Check keyword rankings for our domain. Show the top 20 keywords by position.",
+      "expected_output": "Uses pagerangers.py with --json rankings --limit 20 to retrieve current keyword positions.",
+      "files": [],
+      "assertions": [
+        "Uses python3 scripts/pagerangers.py command",
+        "Passes --json flag BEFORE the subcommand",
+        "Uses 'rankings' subcommand",
+        "Uses --limit flag to restrict results",
+        "Does not use 'keyword' subcommand (that's for Explorer, not Monitoring)"
+      ]
+    },
+    {
+      "id": 2,
+      "eval_name": "find-keyword-opportunities",
+      "prompt": "Find keyword opportunities with the best ranking potential for our project.",
+      "expected_output": "Uses pagerangers.py with --json prospects to find high-opportunity keywords.",
+      "files": [],
+      "assertions": [
+        "Uses python3 scripts/pagerangers.py command",
+        "Passes --json flag BEFORE the subcommand",
+        "Uses 'prospects' subcommand (not 'keyword' or 'rankings')",
+        "Includes --limit flag for manageable output",
+        "Interprets results with actionable SEO insights"
+      ]
+    }
+  ]
+}

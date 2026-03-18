@@ -1,6 +1,13 @@
 ---
 name: pagerangers-seo
-description: "Use when querying PageRangers SEO API for keyword analysis, search rankings, SERP data, KPIs, or keyword opportunities."
+description: "ALWAYS use for ANY PageRangers or SEO ranking operation — keyword analysis, SERP data, search volume, competition metrics, ranking positions, KPIs, or keyword opportunities via PageRangers API."
+license: "(MIT AND CC-BY-SA-4.0). See LICENSE-MIT and LICENSE-CC-BY-SA-4.0"
+compatibility: "Requires python3, uv. PageRangers API credentials."
+metadata:
+  author: Netresearch DTT GmbH
+  version: "1.0.7"
+  repository: https://github.com/netresearch/pagerangers-skill
+allowed-tools: Bash(python3:*) Bash(uv:*) Read
 ---
 
 # PageRangers SEO
