@@ -1,6 +1,6 @@
 ---
 name: pagerangers-seo
-description: "ALWAYS use for ANY PageRangers or SEO ranking operation — keyword analysis, SERP data, search volume, competition metrics, ranking positions, KPIs, or keyword opportunities via PageRangers API."
+description: "Use when working with ANY PageRangers or SEO ranking operation — keyword analysis, SERP data, search volume, competition metrics, ranking positions, KPIs, or keyword opportunities via PageRangers API."
 license: "(MIT AND CC-BY-SA-4.0). See LICENSE-MIT and LICENSE-CC-BY-SA-4.0"
 compatibility: "Requires python3, uv. PageRangers API credentials."
 metadata:
