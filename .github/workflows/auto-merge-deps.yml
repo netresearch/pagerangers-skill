@@ -7,7 +7,7 @@ permissions: {}
 
 jobs:
   auto-merge:
-    uses: netresearch/skill-repo-skill/.github/workflows/auto-merge-deps.yml@83a6cb774596d0418e08ce24bb7f35417d7eef4c # main
+    uses: netresearch/skill-repo-skill/.github/workflows/auto-merge-deps.yml@075ab60ba90c7c057b96f5a5b32dc48a5085d402 # main
     permissions:
       contents: write
       pull-requests: write
