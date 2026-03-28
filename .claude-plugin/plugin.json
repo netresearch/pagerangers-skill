@@ -16,6 +16,10 @@
     "rankings",
     "monitoring"
   ],
+  "support": {
+    "issues": "https://github.com/netresearch/pagerangers-skill/issues",
+    "source": "https://github.com/netresearch/pagerangers-skill"
+  },
   "skills": [
     "."
   ],

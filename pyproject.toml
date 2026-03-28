@@ -35,6 +35,7 @@ dev = [
 Homepage = "https://github.com/netresearch/pagerangers-skill"
 Repository = "https://github.com/netresearch/pagerangers-skill"
 Issues = "https://github.com/netresearch/pagerangers-skill/issues"
+Support = "https://github.com/netresearch/pagerangers-skill/issues"
 
 [build-system]
 requires = ["hatchling"]
