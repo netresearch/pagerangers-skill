@@ -7,6 +7,12 @@
   "labels": ["dependencies"],
   "packageRules": [
     {
+      "description": "Do not pin org-internal reusable workflows (use @main)",
+      "matchManagers": ["github-actions"],
+      "matchPackageNames": ["netresearch/**"],
+      "pinDigests": false
+    },
+    {
       "matchManagers": ["github-actions"],
       "automerge": true,
       "automergeType": "pr",
