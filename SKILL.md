@@ -5,7 +5,7 @@ license: "(MIT AND CC-BY-SA-4.0). See LICENSE-MIT and LICENSE-CC-BY-SA-4.0"
 compatibility: "Requires python3, uv. PageRangers API credentials."
 metadata:
   author: Netresearch DTT GmbH
-  version: "1.1.3"
+  version: "1.1.4"
   repository: https://github.com/netresearch/pagerangers-skill
 allowed-tools: Bash(python3:*) Bash(uv:*) Read
 ---
