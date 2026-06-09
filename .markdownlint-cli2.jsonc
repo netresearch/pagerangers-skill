@@ -5,6 +5,8 @@
     // Disable line length - tables and URLs regularly exceed 80 chars
     "MD013": false,
     // Disable table column style - compact style used consistently
-    "MD060": false
+    "MD060": false,
+    // Allow repeated headings (e.g. "Changed") across CHANGELOG version sections
+    "MD024": { "siblings_only": true }
   }
 }
