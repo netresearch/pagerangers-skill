@@ -64,13 +64,6 @@ PageRangers Monitoring ≠ Explorer:
 
 Keywords in Monitoring don't automatically have Explorer data. If `keyword` returns empty, use `rankings` instead.
 
-## Best Practices
-
-1. Always use `--json` flag for structured data parsing
-2. Limit results appropriately (`--limit 10-20` for readability)
-3. Combine multiple data sources for comprehensive analysis
-4. Interpret metrics in context of user's business goals
-
 ## Related Files
 
 - `SKILL.md` - Main skill definition
