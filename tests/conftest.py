@@ -30,7 +30,7 @@ def mock_env() -> Generator[dict[str, str], None, None]:
 @pytest.fixture
 def config_path() -> Path:
     """Return path to the API config file."""
-    return Path(__file__).parent.parent / "references" / "pagerangers-api.json"
+    return Path(__file__).parent.parent / "skills" / "pagerangers-seo" / "references" / "pagerangers-api.json"
 
 
 @pytest.fixture
