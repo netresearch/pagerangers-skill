@@ -19,10 +19,10 @@ This skill provides access to the PageRangers Monitoring API for SEO data analys
 
 | Command | Purpose | Example |
 |---------|---------|---------|
-| `kpis` | Get project performance metrics | `python3 scripts/pagerangers.py --json kpis` |
-| `rankings` | List keyword positions | `python3 scripts/pagerangers.py --json rankings --limit 20` |
-| `keyword` | Analyze specific keyword | `python3 scripts/pagerangers.py --json keyword "SEO tools"` |
-| `prospects` | Find opportunities | `python3 scripts/pagerangers.py --json prospects --limit 10` |
+| `kpis` | Get project performance metrics | `python3 skills/pagerangers-seo/scripts/pagerangers.py --json kpis` |
+| `rankings` | List keyword positions | `python3 skills/pagerangers-seo/scripts/pagerangers.py --json rankings --limit 20` |
+| `keyword` | Analyze specific keyword | `python3 skills/pagerangers-seo/scripts/pagerangers.py --json keyword "SEO tools"` |
+| `prospects` | Find opportunities | `python3 skills/pagerangers-seo/scripts/pagerangers.py --json prospects --limit 10` |
 
 > **Flag order:** Global flags (`--json`, `--debug`) must come **before** the subcommand.
 
@@ -66,7 +66,7 @@ Keywords in Monitoring don't automatically have Explorer data. If `keyword` retu
 
 ## Related Files
 
-- `SKILL.md` - Main skill definition
-- `scripts/pagerangers.py` - CLI implementation
-- `references/pagerangers-api.md` - API documentation
-- `references/pagerangers-api.json` - Endpoint configuration
+- `skills/pagerangers-seo/SKILL.md` - Main skill definition
+- `skills/pagerangers-seo/scripts/pagerangers.py` - CLI implementation
+- `skills/pagerangers-seo/references/pagerangers-api.md` - API documentation
+- `skills/pagerangers-seo/references/pagerangers-api.json` - Endpoint configuration

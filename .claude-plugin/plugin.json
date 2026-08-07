@@ -21,7 +21,7 @@
     "source": "https://github.com/netresearch/pagerangers-skill"
   },
   "skills": [
-    "."
+    "./skills/pagerangers-seo"
   ],
   "hooks": "./hooks/hooks.json"
 }

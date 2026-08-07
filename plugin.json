@@ -1,0 +1,20 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "pagerangers-seo",
+  "version": "1.2.3",
+  "description": "PageRangers SEO API integration for AI assistants",
+  "author": {
+    "name": "Netresearch DTT GmbH",
+    "url": "https://www.netresearch.de/"
+  },
+  "repository": "https://github.com/netresearch/pagerangers-skill",
+  "license": "(MIT AND CC-BY-SA-4.0)",
+  "keywords": [
+    "pagerangers",
+    "seo",
+    "serp",
+    "keyword-research",
+    "rankings",
+    "monitoring"
+  ]
+}

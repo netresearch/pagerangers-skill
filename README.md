@@ -22,10 +22,10 @@ PAGERANGERS_PROJECT_HASH=your_project_hash_here
 EOF
 
 # 2. Run commands (--json flag must come before subcommand)
-python3 scripts/pagerangers.py --json kpis
-python3 scripts/pagerangers.py --json rankings --limit 10
-python3 scripts/pagerangers.py --json keyword "SEO tools" --top 5
-python3 scripts/pagerangers.py --json prospects --limit 10
+python3 skills/pagerangers-seo/scripts/pagerangers.py --json kpis
+python3 skills/pagerangers-seo/scripts/pagerangers.py --json rankings --limit 10
+python3 skills/pagerangers-seo/scripts/pagerangers.py --json keyword "SEO tools" --top 5
+python3 skills/pagerangers-seo/scripts/pagerangers.py --json prospects --limit 10
 ```
 
 ## Installation
@@ -90,17 +90,23 @@ ruff format scripts tests
 
 ```text
 pagerangers-seo/
+├── plugin.json         # Agent Plugins 1.0.0 manifest
 ├── .claude-plugin/     # Claude Code plugin manifest
 │   └── plugin.json
-├── scripts/            # CLI scripts
-│   └── pagerangers.py
-├── references/         # API documentation
-│   ├── pagerangers-api.json
-│   └── pagerangers-api.md
+├── skills/
+│   └── pagerangers-seo/
+│       ├── SKILL.md        # Skill definition
+│       ├── scripts/        # CLI scripts
+│       │   └── pagerangers.py
+│       └── references/     # API documentation
+│           ├── pagerangers-api.json
+│           └── pagerangers-api.md
+├── scripts/            # plugin-level scripts (hooks, harness)
+│   └── detect_credentials.py
+├── hooks/              # Claude Code hooks
 ├── tests/              # Pytest test suite
 │   ├── conftest.py
 │   └── test_pagerangers.py
-├── SKILL.md            # Skill definition
 ├── AGENTS.md           # Agent documentation
 ├── pyproject.toml      # Python project config
 └── README.md           # This file
